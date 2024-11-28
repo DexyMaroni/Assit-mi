@@ -38,11 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.facebook',
+    'core',
 ]
 
 MIDDLEWARE = [
@@ -53,7 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'socialaccount.middleware.SocialAccountMiddleware',
+
     
     
 ]
@@ -149,10 +145,29 @@ GEMINI_API_KEY = os.getenv("GOOGLE_API_KEY")
 
 
 
-AUTHENTICATION_BACKENDS = (
+'''AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',  # Default Django Allauth backend
     'django.contrib.auth.backends.ModelBackend',  # Default Django auth backend
 )
-
+'''
 
 SITE_ID = 1
+
+
+AUTH_USER_MODEL = 'core.CustomUser'
+
+
+import os
+
+# Media files (user-uploaded content)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # example SMTP host
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'your_email@gmail.com'
+EMAIL_HOST_PASSWORD = 'your_password'

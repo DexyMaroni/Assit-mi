@@ -1,50 +1,42 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.contrib.auth import get_user_model
+import random
+from datetime import timedelta
+from django.utils.timezone import now
 
-# Create your models here.
+class CustomUser(AbstractUser):
+    full_name = models.CharField(max_length=150)
+    profile_picture = models.ImageField(
+        upload_to='profile_pictures/', 
+        default='profile_pictures/default.jpg'  # Default profile picture
+    )
+    is_verified_status = models.BooleanField(default=False)
 
-from django.contrib.auth.models import User
+    def __str__(self):
+        return self.username
 
-# Sticky Note Model
-class StickyNote(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=200)
-    content = models.TextField()
+
+class EmailVerificationToken(models.Model):
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
+    token = models.CharField(max_length=6)
     created_at = models.DateTimeField(auto_now_add=True)
+    is_used = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.title
+        return f"OTP for {self.user.username}"
 
-# Lecture Note Model
-class LectureNote(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    course_name = models.CharField(max_length=200)
-    institution = models.CharField(max_length=200)
-    instructor = models.CharField(max_length=200)
-    date = models.DateField()
-    content = models.TextField()
+    def generate_otp(self):
+        """Generates a random 6-digit OTP."""
+        self.token = str(random.randint(100000, 999999))
+        self.save()
+        
+        
+class OTPModel(models.Model):
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    token = models.CharField(max_length=6)
     created_at = models.DateTimeField(auto_now_add=True)
+    is_used = models.BooleanField(default=False)
 
-    def __str__(self):
-        return f"{self.course_name} - {self.instructor}"
-
-# Event Model (for calendar)
-class Event(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=200)
-    description = models.TextField()
-    date_time = models.DateTimeField()
-    location = models.CharField(max_length=200)
-
-    def __str__(self):
-        return self.title
-
-# Study Group Model
-class StudyGroup(models.Model):
-    name = models.CharField(max_length=200)
-    description = models.TextField()
-    is_private = models.BooleanField(default=True)
-    members = models.ManyToManyField(User, related_name='study_groups')
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.name
+    def is_expired(self):
+        return now() > self.created_at + timedelta(minutes=10)  # Expiry time of 10 minutes
