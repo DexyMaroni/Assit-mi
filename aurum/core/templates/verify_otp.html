@@ -6,12 +6,12 @@
     <title>Verify OTP</title>
 </head>
 <body>
-    <h1>OTP Verification</h1>
-    <form method="post" action="{% url 'core:verify_otp' %}">
+    <h2>Verify OTP</h2>
+    <form method="post">
         {% csrf_token %}
-        <label for="otp">Enter OTP:</label>
-        <input type="text" name="otp" id="otp" maxlength="6" required>
-        <button type="submit">Verify</button>
+        <label for="otp">Enter OTP</label>
+        <input type="text" name="otp" required>
+        <button type="submit">Verify OTP</button>
     </form>
     {% if messages %}
         {% for message in messages %}

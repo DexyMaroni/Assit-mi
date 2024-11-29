@@ -1,8 +1,16 @@
-from django.http import JsonResponse
+'''from django.http import JsonResponse
 from .gemini_utils import generate_content
 from django.views.decorators.csrf import csrf_exempt
 from datetime import timedelta
 import random
+from django.core.mail import send_mail
+from django.shortcuts import render, redirect
+from django.contrib.auth import get_user_model
+from django.contrib import messages
+from django.conf import settings
+from django.utils.timezone import now
+from .models import EmailVerificationToken, OTPModel
+from .forms import OTPVerificationForm, RegistrationForm
 
 
 
@@ -12,15 +20,8 @@ def test_gemini(request):
     result = generate_content(prompt)
     return JsonResponse({"result": result})
 
+User = get_user_model()
 
-from django.core.mail import send_mail
-from django.shortcuts import render, redirect
-from django.contrib.auth import get_user_model
-from django.contrib import messages
-from django.conf import settings
-from django.utils.timezone import now
-from .models import EmailVerificationToken, OTPModel
-from .forms import OTPVerificationForm, RegistrationForm
 def send_otp(user):
     """Send an OTP to the user's email."""
     otp_token = EmailVerificationToken.objects.create(user=user)
@@ -46,36 +47,116 @@ def register(request):
     return render(request, 'register.html', {'form': form})
 
 def verify_otp(request):
-    if request.method == "POST":
-        otp_input = request.POST.get("otp")  # Get OTP entered by the user
-        user = request.user  # Assuming the user is logged in or passed via session
-        
+    if request.method == 'POST':
+        otp_input = request.POST.get('otp')
+        email = request.session.get('email')  # Retrieve email from session
+
+        if not email:
+            messages.error(request, "No email found in session. Please register again.")
+            return redirect('register')
+
+        # Check if the user exists
+        user = User.objects.filter(email__iexact=email).first()
+        if not user:
+            messages.error(request, "User with this email does not exist.")
+            return redirect('register')
+
+        # Check if the OTP exists and is valid
         try:
-            # Retrieve the most recent unused OTP for the user
             otp_object = OTPModel.objects.get(user=user, token=otp_input, is_used=False)
-
-            # Check if the OTP is expired
-            expiration_time = otp_object.created_at + timedelta(minutes=10)  # Adjust as needed
-            if now() > expiration_time:
-                messages.error(request, "The OTP has expired. Please request a new one.")
-                return redirect("verify_otp")
-
-            # Mark OTP as used and activate the user
-            otp_object.is_used = True
+            otp_object.is_used = True  # Mark OTP as used
             otp_object.save()
 
-            # Activate the user or perform other actions
-            user.is_verified_status = True
+            user.is_verified_status = True  # Mark user as verified
             user.save()
 
-            messages.success(request, "Your email has been verified successfully!")
-            return redirect("dashboard")  # Redirect to the dashboard or another page
-
+            messages.success(request, "Email verified successfully! You can now log in.")
+            return redirect('login')  # Redirect to login page
         except OTPModel.DoesNotExist:
-            # OTP not found or already used
-            messages.error(request, "Invalid OTP. Please try again.")
-            return redirect("verify_otp")
+            messages.error(request, "Invalid or expired OTP.")
+            return redirect('verify_otp')
+    return render(request, 'verify_otp.html')
 
-    # Render the OTP verification page
-    return render(request, "verify_otp.html")
+
+'''
+
+
+from django.shortcuts import render, redirect
+from .forms import NoteForm, CustomUserCreationForm
+from django.contrib.auth.forms import UserCreationForm
+from .gemini_utils import generate_content
+from django.contrib.auth import login
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.contrib.auth import login
+from .models import CustomUser
+import random
+from django.core.mail import send_mail
+from django.shortcuts import render, redirect
+from django.conf import settings
+from .forms import CustomUserCreationForm
+from .models import CustomUser
+
+
+def summarize_note(request):
+    if request.method == 'POST':
+        form = NoteForm(request.POST)
+        if form.is_valid():
+            note = form.save()
+            # Summarize the note content using Gemini API
+            summarized_content = generate_content(note.content)
+            note.content = summarized_content
+            note.save()
+            return redirect('note_detail', pk=note.pk)
+    else:
+        form = NoteForm()
+
+    return render(request, 'summarize_note.html', {'form': form})
+
+
+# This will store OTPs temporarily for testing purposes
+otp_storage = {}
+
+def send_otp(email):
+    otp = random.randint(100000, 999999)
+    otp_storage[email] = otp
+    send_mail(
+        'Your OTP Code',
+        f'Your OTP code is {otp}',
+        settings.EMAIL_HOST_USER,
+        [email],
+        fail_silently=False,
+    )
+
+def register(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.save()
+            send_otp(user.email)  # Send OTP after successful registration
+            messages.success(request, 'Please check your email for the OTP.')
+            return redirect('verify_otp.html', user_id=user.id)  # Redirect to OTP verification page
+    else:
+        form = CustomUserCreationForm()
+
+    return render(request, 'register.html', {'form': form})
+
+def verify_otp(request, user_id):
+    user = CustomUser.objects.get(id=user_id)
+    if request.method == 'POST':
+        otp_entered = request.POST.get('otp')
+        if otp_entered and otp_storage.get(user.email) == int(otp_entered):
+            user.is_active = True
+            user.save()
+            login(request, user)
+            del otp_storage[user.email]  # Clear OTP after successful verification
+            messages.success(request, 'Your email has been verified. You are now logged in.')
+            return redirect('home')  # Redirect to home page after successful login
+        else:
+            messages.error(request, 'Invalid OTP. Please try again.')
+
+    return render(request, 'verify_otp.html', {'user': user})
+
 

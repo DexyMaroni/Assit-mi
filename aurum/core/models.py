@@ -1,4 +1,4 @@
-from django.contrib.auth.models import AbstractUser
+'''from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.contrib.auth import get_user_model
 import random
@@ -39,4 +39,36 @@ class OTPModel(models.Model):
     is_used = models.BooleanField(default=False)
 
     def is_expired(self):
-        return now() > self.created_at + timedelta(minutes=10)  # Expiry time of 10 minutes
+        return now() > self.created_at + timedelta(minutes=10)  # Expiry time of 10 minutes'''
+        
+        
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+import random
+from django.utils.timezone import now
+from datetime import timedelta
+from django.conf import settings
+
+class Note(models.Model):
+    CATEGORY_CHOICES = [
+        ('lecture', 'Lecture'),
+        ('sticky', 'Sticky'),
+    ]
+    
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    category = models.CharField(max_length=7, choices=CATEGORY_CHOICES, default='lecture')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return self.title
+
+
+class CustomUser(AbstractUser):
+    first_name = models.CharField(max_length=255)
+    middle_name = models.CharField(max_length=255, blank=True, null=True)
+    email = models.EmailField(unique=True)
+
+    def __str__(self):
+        return self.username

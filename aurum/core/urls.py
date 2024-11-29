@@ -5,7 +5,7 @@ from . import views
 app_name = 'core'
 
 urlpatterns = [
-    path('test-gemini/', views.test_gemini, name='test_gemini'),
-    path('register/', views.register, name='register'),
-    path('verify-otp/', views.verify_otp, name='verify_otp'),
+    path('summarize-note/', views.summarize_note, name='summarize_note'),
+    path("register/", views.register, name="register"),
+    path('verify_otp/<int:user_id>/', views.verify_otp, name='verify_otp'),
 ]
