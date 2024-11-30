@@ -38,7 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    'core',
+    'users',
+    'notes',
+    'groups',
+    'productivity',
 ]
 
 MIDDLEWARE = [
@@ -154,7 +157,7 @@ GEMINI_API_KEY = os.getenv("GOOGLE_API_KEY")
 SITE_ID = 1
 
 
-AUTH_USER_MODEL = 'core.CustomUser'
+AUTH_USER_MODEL = 'users.CustomUser'
 
 
 import os
@@ -176,3 +179,9 @@ EMAIL_HOST_PASSWORD = 'your_password'
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',  # Default
 ]
+
+
+LOGIN_REDIRECT_URL = 'dashboard'  # Replace with your post-login page
+LOGOUT_REDIRECT_URL = 'login'
+
+

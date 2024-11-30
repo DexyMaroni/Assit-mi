@@ -22,7 +22,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('core/', include('core.urls')),
+    path('users/', include('users.urls')),
 ]
 
 if settings.DEBUG:  # Only serve media files in development
