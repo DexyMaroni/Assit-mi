@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import RegistrationForm, LoginForm
@@ -6,6 +5,12 @@ from .models import CustomUser
 from .utils import generate_otp, send_otp
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
+import random
+from django.utils.timezone import now
+
+
+
 
 def register(request):
     if request.method == 'POST':
@@ -27,6 +32,38 @@ def register(request):
     else:
         form = RegistrationForm()
     return render(request, 'users/register.html', {'form': form})
+
+
+
+
+def otp_verification(request):
+    if request.method == 'POST':
+        otp = request.POST.get('otp')
+        try:
+            user = CustomUser.objects.get(email=request.session.get('email'))
+            if not user.is_active:
+                if user.is_otp_valid():
+                    if user.otp == otp:
+                        user.is_active = True
+                        user.otp = None
+                        user.otp_created_at = None  # Clear timestamp
+                        user.save()
+                        login(request, user)
+                        messages.success(request, "Your account has been verified and you're now logged in.")
+                        return redirect('dashboard')
+                    else:
+                        messages.error(request, "Invalid OTP. Please try again.")
+                else:
+                    messages.error(request, "OTP has expired. Please request a new one.")
+                    return redirect('resend_otp')  # Add a route to resend OTP
+
+            else:
+                messages.warning(request, "Your account is already verified. Please log in.")
+                return redirect('login')
+        except ObjectDoesNotExist:
+            messages.error(request, "User not found. Please register again.")
+            return redirect('register')
+    return render(request, 'users/otp_verification.html')
 
 
 
@@ -71,6 +108,30 @@ def user_login(request):
     return render(request, 'users/login.html', {'form': form})
 
 
+
+
+
+def resend_otp(request):
+    try:
+        user = CustomUser.objects.get(email=request.session.get('email'))
+        if not user.is_active:
+            user.otp = f"{random.randint(100000, 999999)}"
+            user.otp_created_at = now()
+            user.save()
+            # Send the OTP via email (reuse your email-sending logic)
+            send_otp(user.email, user.otp)
+            messages.success(request, "A new OTP has been sent to your email.")
+        else:
+            messages.warning(request, "Your account is already verified. Please log in.")
+            return redirect('login')
+    except ObjectDoesNotExist:
+        messages.error(request, "User not found. Please register again.")
+        return redirect('register')
+    return redirect('otp_verification')
+
+
+
+
 def user_logout(request):
     logout(request)
     messages.success(request, "You have been logged out.")
@@ -79,8 +140,14 @@ def user_logout(request):
 
 @login_required
 def dashboard(request):
-    return render(request, 'users/dashboard.html', {'user': request.user})
-
+    # Custom data based on the user
+    user_data = {
+        "first_name": request.user.first_name,
+        "last_name": request.user.last_name,
+        "email": request.user.email,
+        "role": request.user.groups.first().name if request.user.groups.exists() else "Student",
+    }
+    return render(request, "users/dashboard.html", {"user_data": user_data})
 
 
 

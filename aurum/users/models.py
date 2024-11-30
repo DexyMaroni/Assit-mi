@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.utils.timezone import now
+from datetime import timedelta
 
 
 # Create your models here.
@@ -38,11 +39,19 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         ('student', 'Student'),
         ('admin', 'Admin'),
     ], default='student')
-
+    otp = models.CharField(max_length=6, null=True, blank=True)
+    otp_created_at = models.DateTimeField(null=True, blank=True)
+    
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
+    
+    
+    def is_otp_valid(self):
+        if self.otp_created_at:
+            return now() <= self.otp_created_at + timedelta(minutes=5)
+        return False
 
     def __str__(self):
         return self.email

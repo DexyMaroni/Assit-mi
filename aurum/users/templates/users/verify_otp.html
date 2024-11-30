@@ -1,7 +1,7 @@
-<h2>Verify OTP</h2>
 <form method="post">
     {% csrf_token %}
     <label for="otp">Enter OTP:</label>
-    <input type="text" name="otp" id="otp" required>
+    <input type="text" name="otp" id="otp">
     <button type="submit">Verify</button>
 </form>
+<p>Didn't receive the OTP? <a href="{% url 'resend_otp' %}">Resend OTP</a></p>
