@@ -1,0 +1,126 @@
+/* General reset for padding and margins */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Arial", sans-serif;
+}
+
+/* Body Styling */
+body {
+    background: linear-gradient(135deg, #FFC300, #fff);
+    color: #333;
+    font-size: 16px;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 20px;
+}
+
+/* Header Styling */
+h1 {
+    color: #333;
+    background-color: #FFC300;
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.2rem;
+    text-transform: uppercase;
+}
+
+/* Section Styling */
+section {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 30px;
+    width: 90%;
+    max-width: 600px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+section:hover {
+    transform: scale(1.03);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+h2 {
+    color: #FFC300;
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+}
+
+/* Form Styling */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+textarea, button, input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #FFC300;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+textarea:focus, button:focus, input[type="text"]:focus {
+    outline: none;
+    border-color: #FF5733;
+    box-shadow: 0px 0px 6px #FF5733;
+}
+
+button {
+    background: #FFC300;
+    color: #333;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #FF5733;
+    color: white;
+}
+
+/* Audio Preview Styling */
+audio {
+    width: 100%;
+    margin: 10px 0;
+}
+
+/* Transcription Output */
+p {
+    font-size: 1rem;
+    padding: 10px;
+    background: #FFF8E1;
+    border: 1px solid #FFC300;
+    border-radius: 8px;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.8rem;
+        padding: 10px 20px;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    button {
+        font-size: 1rem;
+    }
+}
