@@ -183,5 +183,7 @@ AUTHENTICATION_BACKENDS = [
 
 LOGIN_REDIRECT_URL = 'dashboard'  # Replace with your post-login page
 LOGOUT_REDIRECT_URL = 'login'
+LOGIN_URL = '/users/login/'
+
 
 

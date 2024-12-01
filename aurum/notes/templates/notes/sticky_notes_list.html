@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>My Sticky Notes</h1>
+<a href="{% url 'sticky_note_create' %}" class="btn btn-primary">Create New Note</a>
+<hr>
+<ul>
+    {% for note in notes %}
+    <li>
+        <p>{{ note.content }}</p>
+        {% if note.attachment %}
+            <a href="{{ note.attachment.url }}">View Attachment</a>
+        {% endif %}
+        <small>Created: {{ note.created_at|date:"M d, Y H:i" }}</small>
+        <br>
+        <a href="{% url 'sticky_note_edit' note.pk %}" class="btn btn-sm btn-warning">Edit</a>
+        <a href="{% url 'sticky_note_delete' note.pk %}" class="btn btn-sm btn-danger">Delete</a>
+    </li>
+    <hr>
+    {% empty %}
+    <p>No sticky notes yet. Start by creating one!</p>
+    {% endfor %}
+</ul>
+{% endblock %}

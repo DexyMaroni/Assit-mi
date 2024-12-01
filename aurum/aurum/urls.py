@@ -23,6 +23,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')),
+    path('notes/sticky-notes/', include('notes.urls')),
 ]
 
 if settings.DEBUG:  # Only serve media files in development
