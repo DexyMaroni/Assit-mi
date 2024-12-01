@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.utils.timezone import now
 from datetime import timedelta
+from PIL import Image
 
 
 # Create your models here.
@@ -55,3 +56,18 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='profile')
+    bio = models.TextField(blank=True, null=True)
+    profile_picture = models.ImageField(upload_to="profile_pics/", default="profile_pics/default.jpg")
+    
+    
+    def __str__(self):
+        return f"{self.user.email} Profile"
+
+
+
+

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Dashboard{% endblock %}
 
@@ -6,4 +7,9 @@
 <h1>Welcome to Your Dashboard, {{ user_data.first_name }}!</h1>
 <p>Your email: {{ user_data.email }}</p>
 <p>Your role: {{ user_data.role }}</p>
+{% if profile and profile.profile_picture %}
+        <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" style="width: 150px; height: 150px; border-radius: 50%;">
+    {% else %}
+        <img src="/media/profile_pics/default.jpg" alt="Default Profile Picture" style="width: 150px; height: 150px; border-radius: 50%;">
+    {% endif %}
 {% endblock %}

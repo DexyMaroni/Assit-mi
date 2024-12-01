@@ -1,14 +1,20 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import RegistrationForm, LoginForm
-from .models import CustomUser
+from .forms import RegistrationForm, LoginForm, ProfileUpdateForm, UserUpdateForm
+from .models import CustomUser, Profile
 from .utils import generate_otp, send_otp
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 import random
 from django.utils.timezone import now
-
+import uuid
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import send_mail
+from django.urls import reverse
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
 
 
@@ -140,15 +146,101 @@ def user_logout(request):
 
 @login_required
 def dashboard(request):
+    # Fetch user profile if it exists
+    profile = None
+    if hasattr(request.user, 'profile'):
+        profile = request.user.profile
+
     # Custom data based on the user
     user_data = {
         "first_name": request.user.first_name,
         "last_name": request.user.last_name,
         "email": request.user.email,
         "role": request.user.groups.first().name if request.user.groups.exists() else "Student",
+        "profile_picture": profile.profile_picture.url if profile and profile.profile_picture else None,
     }
+
     return render(request, "users/dashboard.html", {"user_data": user_data})
 
 
+def forgot_password(request):
+    if request.method == "POST":
+        email = request.POST.get('email')
+        try:
+            user = CustomUser.objects.get(email=email)
+            token = default_token_generator.make_token(user)
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            reset_link = request.build_absolute_uri(reverse('reset_password', kwargs={'uidb64': uid, 'token': token}))
 
 
+            # Send Reset Email
+            send_mail(
+                'Password Reset Request',
+                f'Click the link to reset your password: {reset_link}',
+                'noreply@aurum.com',
+                [email],
+                fail_silently=False,
+            )
+            messages.success(request, 'A password reset link has been sent to your email.')
+            return redirect('forgot_password')
+        except CustomUser.DoesNotExist:
+            messages.error(request, 'Email not found.')
+    
+    return render(request, 'users/forgot_password.html')
+
+
+
+def reset_password(request, uidb64=None, token=None):
+    if request.method == 'POST':
+        new_password = request.POST['password']
+        confirm_password = request.POST['confirm_password']
+        
+        if new_password != confirm_password:
+            messages.error(request, "Passwords do not match.")
+            return redirect(request.path)
+        
+        try:
+            uid = urlsafe_base64_decode(uidb64).decode()
+            user = CustomUser.objects.get(pk=uid)
+            token_generator = PasswordResetTokenGenerator()
+            
+            if token_generator.check_token(user, token):
+                user.set_password(new_password)
+                user.save()
+                messages.success(request, "Password reset successfully.")
+                return redirect('login')
+            else:
+                messages.error(request, "The reset link is invalid or has expired.")
+        except Exception:
+            messages.error(request, "Invalid reset link.")
+            
+    return render(request, 'users/reset_password.html')
+
+
+@login_required
+def profile(request):
+    # Automatically create a profile for the user if it doesn't exist
+    if not hasattr(request.user, 'profile'):
+        Profile.objects.get_or_create(user=request.user)
+
+    if request.method == "POST":
+        user_form = UserUpdateForm(request.POST, instance=request.user)
+        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, "Your profile has been successfully updated!")
+            return redirect("profile")
+        else:
+            # Add error messages if the forms are not valid
+            messages.error(request, "Please correct the errors below.")
+    else:
+        user_form = UserUpdateForm(instance=request.user)
+        profile_form = ProfileUpdateForm(instance=request.user.profile)
+
+    context = {
+        "user_form": user_form,
+        "profile_form": profile_form,
+    }
+    return render(request, "users/profile.html", context)

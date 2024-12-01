@@ -1,5 +1,5 @@
 from django import forms
-from .models import CustomUser
+from .models import CustomUser, Profile
 
 class RegistrationForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput, min_length=8)
@@ -24,5 +24,21 @@ class LoginForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput)
 
 
+    class Meta:
+        model = CustomUser
+        fields = [ "email", "first_name", "last_name"]
 
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['profile_picture']
+
+        widgets = {
+            'profile_picture': forms.ClearableFileInput(attrs={'class': 'form-control'})
+        }
+        
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ["email", "first_name", "last_name"]
 

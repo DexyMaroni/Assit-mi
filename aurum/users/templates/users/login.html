@@ -59,5 +59,10 @@
         </form>
         <p>Don't have an account? <a href="{% url 'register' %}">Register here</a>.</p>
     </div>
+    {% if messages %}
+    {% for message in messages %}
+        <p>{{ message }}</p>
+    {% endfor %}
+{% endif %}
 </body>
 </html>
