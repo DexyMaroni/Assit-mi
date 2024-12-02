@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>{% if note %}Edit{% else %}Add{% endif %} Sticky Note</h1>
+
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <fieldset>
+      <legend>Sticky Note</legend>
+      {{ form.as_p }}
+    </fieldset>
+    
+    <fieldset>
+      <legend>Attachments</legend>
+      {{ attachment_form.as_p }}
+    </fieldset>
+
+    <button type="submit">{% if note %}Update{% else %}Create{% endif %} Sticky Note</button>
+  </form>
+
+  <a href="{% url 'sticky_notes_list' %}" style="color: #007bff; text-decoration: none;">Back to Sticky Notes</a>
+{% endblock %}

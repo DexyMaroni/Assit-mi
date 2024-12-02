@@ -14,6 +14,7 @@ from django.utils.encoding import force_bytes, force_str
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.urls import reverse
+from notes.models import StickyNote
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
 
@@ -151,6 +152,9 @@ def dashboard(request):
     if hasattr(request.user, 'profile'):
         profile = request.user.profile
 
+    # Fetch user's sticky notes
+    sticky_notes = StickyNote.objects.filter(user=request.user)
+
     # Custom data based on the user
     user_data = {
         "first_name": request.user.first_name,
@@ -160,8 +164,7 @@ def dashboard(request):
         "profile_picture": profile.profile_picture.url if profile and profile.profile_picture else None,
     }
 
-    return render(request, "users/dashboard.html", {"user_data": user_data})
-
+    return render(request, "users/dashboard.html", {"user_data": user_data, "sticky_notes": sticky_notes})
 
 def forgot_password(request):
     if request.method == "POST":

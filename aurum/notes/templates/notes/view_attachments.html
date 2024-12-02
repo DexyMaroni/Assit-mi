@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Attachments for Sticky Note: "{{ note.title }}"</h1>
+
+  <ul>
+    {% for attachment in attachments %}
+      <li>
+        <a href="{{ attachment.file.url }}" target="_blank">{{ attachment.file.name }}</a>
+        <!-- I can also display a thumbnail for images or a PDF icon, etc. -->
+        <form action="{% url 'delete_attachment' attachment.id %}" method="POST" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit">Delete</button>
+        </form>
+      </li>
+    {% empty %}
+      <li>No attachments found for this sticky note.</li>
+    {% endfor %}
+  </ul>
+
+  <a href="{% url 'add_attachment' note.id %}">Add Attachment</a> <!-- Link to upload new attachment -->
+{% endblock %}

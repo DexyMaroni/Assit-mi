@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Are you sure you want to delete the sticky note: "{{ note.title }}"?</h1>
+  
+  <form method="POST">
+    {% csrf_token %}
+    <button type="submit">Yes, Delete</button>
+  </form>
+  
+  <a href="{% url 'sticky_notes_list' %}">Cancel</a>
+{% endblock %}

@@ -1,15 +1,18 @@
 from django import forms
-from .models import StickyNote
+from .models import StickyNote, Attachment
 
 class StickyNoteForm(forms.ModelForm):
     class Meta:
         model = StickyNote
-        fields = ['content', 'attachment']
-        widgets = {
-            'content': forms.Textarea(attrs={
-                'class': 'form-control',
-                'placeholder': 'Write your note here...',
-                'rows': 5
-            }),
-            'attachment': forms.ClearableFileInput(attrs={'class': 'form-control'}),
-        }
+        fields = ['title', 'body', 'category']
+        
+    # Additional validation can be added here if needed
+
+
+
+class AttachmentForm(forms.ModelForm):
+    class Meta:
+        model = Attachment
+        fields = ['file']
+        
+    # Additional validations to added here if required (e.g., file size, type)
