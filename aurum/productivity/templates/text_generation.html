@@ -1,0 +1,15 @@
+<!-- text_generation.html -->
+<h1>Generate Text from Prompt</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Generate</button>
+</form>
+
+{% if response %}
+    <h2>Generated Response:</h2>
+    <div id="response">
+        <pre>{{ response }}</pre>
+    </div>
+{% endif %}
