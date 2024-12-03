@@ -51,6 +51,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'todo_app.monitor_middleware.MonitorMiddleware',
+
 ]
 
 ROOT_URLCONF = 'todo_project.urls'
@@ -102,6 +104,23 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'todo_app': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        },
+    },
+}
+
 
 
 # Internationalization
