@@ -1,6 +1,5 @@
 from django import forms
-from .models import StickyNote, Attachment
-
+from .models import StickyNote, Attachment, LectureNote, LectureAttachment
 class StickyNoteForm(forms.ModelForm):
     class Meta:
         model = StickyNote
@@ -15,15 +14,10 @@ class AttachmentForm(forms.ModelForm):
         model = Attachment
         fields = ['file']
         
-    # Additional validations to added here if required (e.g., file size, type)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['file'].required = False 
 
-
-
-
-
-
-from django import forms
-from .models import LectureNote, LectureAttachment
 
 class LectureNoteForm(forms.ModelForm):
     class Meta:
@@ -36,6 +30,6 @@ class LectureAttachmentForm(forms.ModelForm):
         fields = ['file']
 
 def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['file'].required = False
+    super().__init__(*args, **kwargs)
+    self.fields['file'].required = False
 

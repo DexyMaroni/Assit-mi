@@ -16,23 +16,24 @@ def sticky_notes_list(request):
 
 @login_required
 def add_edit_sticky_note(request, note_id=None):
-    # If note_id is provided, retrieve the sticky note; otherwise, set it to None
-    if note_id:
-        note = get_object_or_404(StickyNote, id=note_id, user=request.user)
-    else:
-        note = None
+    # Retrieve or initialize the sticky note
+    note = get_object_or_404(StickyNote, id=note_id, user=request.user) if note_id else None
 
     if request.method == "POST":
+        # Handle sticky note form
         form = StickyNoteForm(request.POST, instance=note)
-        attachment_form = AttachmentForm(request.POST, request.FILES)
+
+        # Only process the attachment if a file is uploaded
+        attachment_form = AttachmentForm(request.POST, request.FILES) if 'file' in request.FILES else None
 
         if form.is_valid():
+            # Save the sticky note
             new_note = form.save(commit=False)
             new_note.user = request.user
             new_note.save()
 
-            # Handle attachment if provided
-            if attachment_form.is_valid() and 'file' in request.FILES:
+            # Save the attachment if provided
+            if attachment_form and attachment_form.is_valid():
                 attachment = attachment_form.save(commit=False)
                 attachment.sticky_note = new_note
                 attachment.save()
@@ -41,7 +42,7 @@ def add_edit_sticky_note(request, note_id=None):
 
     else:
         form = StickyNoteForm(instance=note)
-        attachment_form = AttachmentForm()
+        attachment_form = AttachmentForm()  # Empty form for new attachments
 
     context = {
         'form': form,
@@ -49,7 +50,6 @@ def add_edit_sticky_note(request, note_id=None):
         'note': note,
     }
     return render(request, 'notes/add_edit_sticky_note.html', context)
-
 
 @login_required
 def add_attachment(request, note_id):

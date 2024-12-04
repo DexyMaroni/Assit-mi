@@ -1,8 +1,6 @@
 # forms.py
 from django import forms
 
-
-
 class TextGenerationForm(forms.Form):
     prompt = forms.CharField(
         widget=forms.Textarea(attrs={'placeholder': 'Enter your prompt here...', 'rows': 5, 'cols': 40}),
@@ -23,19 +21,3 @@ class TextGenerationForm(forms.Form):
     )
 
 
-
-
-
-
-
-
-
-
-
-
-class NoteGenerationForm(forms.Form):
-    prompt = forms.CharField(
-        label="Enter a prompt for note generation",
-        widget=forms.Textarea(attrs={"placeholder": "Type keywords or a brief description..."}),
-        required=True,
-    )

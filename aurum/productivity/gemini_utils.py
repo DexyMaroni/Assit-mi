@@ -17,3 +17,4 @@ def generate_text_from_prompt(prompt, max_tokens=200, temperature=0.7):
         return response.text
     except Exception as e:
         return f"Error: {e}"
+    

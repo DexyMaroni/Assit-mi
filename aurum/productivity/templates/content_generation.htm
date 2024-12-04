@@ -1,0 +1,14 @@
+<h1>Generate Content</h1>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Generate</button>
+</form>
+
+{% if response %}
+    <h2>Generated Response:</h2>
+    <div id="response">
+        <pre>{{ response }}</pre>
+    </div>
+{% endif %}

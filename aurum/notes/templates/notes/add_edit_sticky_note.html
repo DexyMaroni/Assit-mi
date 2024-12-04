@@ -12,10 +12,10 @@
     </fieldset>
     
     <fieldset>
-      <legend>Attachments</legend>
-      {{ attachment_form.as_p }}
+      <legend>Attachment (optional)</legend>
+      {{ attachment_form.file }}
     </fieldset>
-
+    
     <button type="submit">{% if note %}Update{% else %}Create{% endif %} Sticky Note</button>
   </form>
 
