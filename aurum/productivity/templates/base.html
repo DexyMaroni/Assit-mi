@@ -3,26 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}AURUM{% endblock %}</title>
+    <title>Aurum - Student Assistant</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+        }
+        header a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        header a:hover {
+            text-decoration: underline;
+        }
+        nav {
+            text-align: center;
+            margin-top: 20px;
+        }
+        nav a {
+            background-color: #008CBA;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin: 10px;
+            text-decoration: none;
+            font-size: 1em;
+        }
+        nav a:hover {
+            background-color: #007B9E;
+        }
+        footer {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: 40px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .auth-links {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .auth-links a {
+            font-size: 1.2em;
+            margin: 10px;
+            text-decoration: none;
+            color: #4CAF50;
+        }
+        .auth-links a:hover {
+            text-decoration: underline;
+        }
+        /* Responsive Design */
+        @media screen and (max-width: 768px) {
+            header a {
+                font-size: 1.1em;
+                margin: 0 10px;
+            }
+            nav a {
+                font-size: 1em;
+                padding: 8px 16px;
+            }
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <nav>
-            {% if user.is_authenticated %}
-                <p>Welcome, {{ user.first_name }}!</p>
-                <a href="{% url 'logout' %}">Logout</a>
-                <a href="{% url 'profile' %}">My Profile</a>
-                {% if user.groups.first.name == 'Admin' %}
-                    <a href="{% url 'admin_dashboard' %}">Admin Panel</a>
-                {% endif %}
-            {% else %}
-                <a href="{% url 'login' %}">Login</a>
-                <a href="{% url 'register' %}">Register</a>
-            {% endif %}
-        </nav>
-    </header>
-    <main>
-        {% block content %}{% endblock %}
-    </main>
+
+<header>
+    <h1>Aurum - Your Study Assistant</h1>
+    <nav>
+        {% if user.is_authenticated %}
+            <a href="{% url 'create_sticky_note' %}">Create Sticky Note</a>
+            <a href="{% url 'create_lecture_note' %}">Create Lecture Note</a>
+            <a href="{% url 'generate_content' %}">Generate AI Content</a>
+            <a href="{% url 'profile' %}">Profile</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+            <a href="{% url 'register' %}">Register</a>
+            <a href="{% url 'login' %}">Login</a>
+        {% endif %}
+    </nav>
+</header>
+
+<div class="container">
+    <div class="content">
+        {% block content %}
+        <!-- Page-specific content goes here -->
+        {% endblock %}
+    </div>
+
+    {% if not user.is_authenticated %}
+    <div class="auth-links">
+        <a href="{% url 'register' %}">Create an account</a>
+        <a href="{% url 'login' %}">Already have an account? Login</a>
+    </div>
+    {% endif %}
+</div>
+
+<footer>
+    <p>&copy; 2024 Aurum Student Assistant. All Rights Reserved.</p>
+</footer>
+
 </body>
 </html>

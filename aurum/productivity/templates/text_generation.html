@@ -1,15 +1,23 @@
-<!-- text_generation.html -->
-<h1>Generate Text from Prompt</h1>
+{% extends "base.html" %}
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Generate</button>
-</form>
+{% block content %}
+    <h1 style="font-family: 'Poppins', sans-serif; color: #333; text-align: center; padding: 20px; font-size: 2em;">Generate Text from Prompt</h1>
 
-{% if response %}
-    <h2>Generated Response:</h2>
-    <div id="response">
-        <pre>{{ response }}</pre>
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <form method="post">
+        {% csrf_token %}
+        <div style="margin-bottom: 20px;">
+            {{ form.as_p }}
+        </div>
+        <button type="submit" style="background-color: #4CAF50; color: white; padding: 12px 20px; border: none; border-radius: 5px; font-size: 1em; cursor: pointer; width: 100%;">Generate</button>
+    </form>
     </div>
-{% endif %}
+
+    {% if response %}
+    <h2 style="font-family: 'Poppins', sans-serif; color: #333; text-align: center; padding: 20px; font-size: 1.5em;">Generated Response:</h2>
+    <div id="response" style="max-width: 800px; margin: 0 auto; padding: 20px; background-color: #fff; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+        <pre style="font-family: 'Courier New', Courier, monospace; white-space: pre-wrap; word-wrap: break-word; color: #555;">{{ response }}</pre>
+    </div>
+    {% endif %}
+{% endblock %}
+

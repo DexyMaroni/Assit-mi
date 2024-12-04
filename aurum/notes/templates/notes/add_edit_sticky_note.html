@@ -6,21 +6,6 @@
         {% if note %}Edit{% else %}Add{% endif %} Sticky Note
     </h1>
 
-  <form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    
-    <fieldset>
-      <legend>Sticky Note</legend>
-      {{ form.as_p }}
-    </fieldset>
-    
-    <fieldset>
-      <legend>Attachment (optional)</legend>
-      {{ attachment_form.file }}
-    </fieldset>
-    
-    <button type="submit">{% if note %}Update{% else %}Create{% endif %} Sticky Note</button>
-  </form>
     <form method="POST" enctype="multipart/form-data" class="sticky-note-form">
         {% csrf_token %}
         

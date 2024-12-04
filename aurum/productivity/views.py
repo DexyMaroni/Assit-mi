@@ -29,26 +29,3 @@ def text_generation_view(request):
         form = TextGenerationForm()
 
     return render(request, "text_generation.html", {"form": form})
-
-
-
-def generate_content_view(request):
-    response = None
-
-    if request.method == "POST":
-        form = TextOrAudioGenerationForm(request.POST, request.FILES)
-        if form.is_valid():
-            prompt = form.cleaned_data.get("prompt")
-            audio_file = request.FILES.get("audio_file")
-            max_tokens = form.cleaned_data["max_tokens"]
-            temperature = form.cleaned_data["temperature"]
-
-            if prompt:
-                response = generate_text_from_prompt(prompt, max_tokens, temperature)
-            elif audio_file:
-                response = transcribe_audio(audio_file)
-
-    else:
-        form = TextOrAudioGenerationForm()
-
-    return render(request, "content_generation.html", {"form": form, "response": response})

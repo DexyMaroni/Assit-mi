@@ -3,125 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}AURUM{% endblock %}</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRAB5yZ3AgKnujs+zGcRrzIiB5A+8E9O24FrP4nF+6j5nQs2YhBd8T7Si" crossorigin="anonymous">
-    <!-- Font Awesome for Icons -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <!-- Internal CSS -->
+    <title>Aurum - Student Assistant</title>
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #f5f7fa;
-        }
-        
-        header {
-            background-color: #4e73df;
-            color: white;
-            padding: 1rem 2rem;
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin-left: 1rem;
-            font-weight: 600;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-
-        nav a:hover {
-            background-color: #3757a6;
-        }
-
-        nav p {
             margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
         }
-
-        main {
-            margin: 2rem auto;
-            max-width: 1000px;
-            padding: 1.5rem;
-        }
-
-        /* Add pastel peach accents */
-        .btn-pastel-peach {
-            background-color: #ff8f2f; /* Pastel Peach */
+        header {
+            background-color: #4CAF50;
             color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 5px;
-            font-size: 1rem;
-            transition: background-color 0.3s ease;
+            padding: 15px 0;
+            text-align: center;
         }
-
-        .btn-pastel-peach:hover {
-            background-color: #ff7f1f;
-        }
-
-        .nav-item a {
+        header a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
             font-weight: bold;
         }
-
-        .nav-item a:hover {
-            color: #ff8f2f;
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            margin-top: 2rem;
-            color: #aaa;
-            font-size: 0.9rem;
-        }
-
-        footer a {
-            color: #4e73df;
-            text-decoration: none;
-        }
-
-        footer a:hover {
+        header a:hover {
             text-decoration: underline;
+        }
+        nav {
+            text-align: center;
+            margin-top: 20px;
+        }
+        nav a {
+            background-color: #008CBA;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin: 10px;
+            text-decoration: none;
+            font-size: 1em;
+        }
+        nav a:hover {
+            background-color: #007B9E;
+        }
+        footer {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: 40px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .auth-links {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .auth-links a {
+            font-size: 1.2em;
+            margin: 10px;
+            text-decoration: none;
+            color: #4CAF50;
+        }
+        .auth-links a:hover {
+            text-decoration: underline;
+        }
+        /* Responsive Design */
+        @media screen and (max-width: 768px) {
+            header a {
+                font-size: 1.1em;
+                margin: 0 10px;
+            }
+            nav a {
+                font-size: 1em;
+                padding: 8px 16px;
+            }
+            .container {
+                padding: 10px;
+            }
         }
     </style>
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="d-flex align-items-center">
-                {% if user.is_authenticated %}
-                    <p class="mb-0 me-3">Welcome, {{ user.first_name }}!</p>
-                    <div class="d-flex">
-                        <a href="{% url 'logout' %}" class="btn btn-pastel-peach"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                        <a href="{% url 'profile' %}" class="btn btn-pastel-peach ms-3"><i class="fas fa-user-circle"></i> My Profile</a>
-                        {% if user.groups.first.name == 'Admin' %}
-                            <a href="{% url 'admin_dashboard' %}" class="btn btn-pastel-peach ms-3"><i class="fas fa-cogs"></i> Admin Panel</a>
-                        {% endif %}
-                    </div>
-                {% else %}
-                    <a href="{% url 'login' %}" class="btn btn-pastel-peach"><i class="fas fa-sign-in-alt"></i> Login</a>
-                    <a href="{% url 'register' %}" class="btn btn-pastel-peach ms-3"><i class="fas fa-user-plus"></i> Register</a>
-                {% endif %}
-            </div>
-        </nav>
-    </header>
-    <main>
-        {% block content %}{% endblock %}
-    </main>
 
-    <footer>
-        <p>&copy; 2024 AURUM. Designed with <i class="fas fa-heart"></i> by the AURUM Team.</p>
-    </footer>
+<header>
+    <h1>Aurum - Your Study Assistant</h1>
+    <nav>
+        {% if user.is_authenticated %}
+            <a href="{% url 'add_sticky_note' %}">Create Sticky Note</a>
+            <a href="{% url 'add_lecture_note' %}">Create Lecture Note</a>
+            <a href="{% url 'generate_notes' %}">Generate AI Content</a>
+            <a href="{% url 'profile' %}">Profile</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+            <a href="{% url 'register' %}">Register</a>
+            <a href="{% url 'login' %}">Login</a>
+        {% endif %}
+    </nav>
+</header>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnFO9gyb9TQxk8C3Rk8RnsEr2E4ht88i03XnChE1r62JXVrZP1g5Z5gD" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0i1EdyRqa1mmmoCq8gl9Uch7zJNEp6vfnxjo00Wv9G/3ddn5" crossorigin="anonymous"></script>
+<div class="container">
+    <div class="content">
+        {% block content %}
+        <!-- Page-specific content goes here -->
+        {% endblock %}
+    </div>
+
+    {% if not user.is_authenticated %}
+    <div class="auth-links">
+        <a href="{% url 'register' %}">Create an account</a>
+        <a href="{% url 'login' %}">Already have an account? Login</a>
+    </div>
+    {% endif %}
+</div>
+
+<footer>
+    <p>&copy; 2024 Aurum Student Assistant. All Rights Reserved.</p>
+</footer>
+
 </body>
 </html>
