@@ -1,7 +1,68 @@
-<form method="post">
+<form method="post" class="otp-form-container">
     {% csrf_token %}
-    <label for="otp">Enter OTP:</label>
-    <input type="text" name="otp" id="otp">
-    <button type="submit">Verify</button>
+    <h4 class="text-center" style="color: #ff8f2f;">Enter OTP</h4>
+    
+    <div class="form-group">
+        <label for="otp" class="form-label">Enter OTP:</label>
+        <input type="text" name="otp" id="otp" class="form-control" placeholder="Enter the OTP sent to your email">
+    </div>
+    
+    <button type="submit" class="btn btn-pastel-peach w-100">
+        <i class="fas fa-check-circle"></i> Verify
+    </button>
+    
+    <p class="mt-3 text-center">
+        Didn't receive the OTP? <a href="{% url 'resend_otp' %}" class="text-decoration-none">Resend OTP</a>
+    </p>
 </form>
-<p>Didn't receive the OTP? <a href="{% url 'resend_otp' %}">Resend OTP</a></p>
+
+<style>
+    /* OTP Form Container */
+    .otp-form-container {
+        max-width: 500px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Button Styling */
+    .btn-pastel-peach {
+        background-color: #ff8f2f; /* Pastel Peach */
+        color: white;
+        font-size: 1rem;
+        padding: 1rem;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+        border: none;
+    }
+
+    .btn-pastel-peach:hover {
+        background-color: #ff7f1f;
+    }
+
+    /* Input Field */
+    .form-control {
+        padding: 1rem;
+        font-size: 1rem;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        margin-bottom: 1rem;
+    }
+
+    /* Label Styling */
+    .form-label {
+        font-weight: 600;
+    }
+
+    /* Resend OTP Link Styling */
+    a {
+        color: #4e73df;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+</style>

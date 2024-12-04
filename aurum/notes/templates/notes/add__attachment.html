@@ -3,44 +3,23 @@
 {% block content %}
 <div class="container py-5">
     <h1 class="text-center mb-4">
-        {% if note %}Edit{% else %}Add{% endif %} Sticky Note
+        Add Attachment to Sticky Note: <span class="text-warning">{{ note.title }}</span>
     </h1>
 
-  <form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    
-    <fieldset>
-      <legend>Sticky Note</legend>
-      {{ form.as_p }}
-    </fieldset>
-    
-    <fieldset>
-      <legend>Attachment (optional)</legend>
-      {{ attachment_form.file }}
-    </fieldset>
-    
-    <button type="submit">{% if note %}Update{% else %}Create{% endif %} Sticky Note</button>
-  </form>
-    <form method="POST" enctype="multipart/form-data" class="sticky-note-form">
+    <form method="POST" enctype="multipart/form-data" class="attachment-form">
         {% csrf_token %}
-        
         <fieldset class="mb-4 p-4" style="background-color: #fff7d1; border-radius: 10px;">
-            <legend class="h5 mb-3">Sticky Note</legend>
+            <legend class="h5 mb-3">Upload Attachment</legend>
             {{ form.as_p }}
         </fieldset>
 
-        <fieldset class="mb-4 p-4" style="background-color: #fff7d1; border-radius: 10px;">
-            <legend class="h5 mb-3">Attachments</legend>
-            {{ attachment_form.as_p }}
-        </fieldset>
-
         <button type="submit" class="btn btn-warning btn-lg w-100 mb-3">
-            {% if note %}Update{% else %}Create{% endif %} Sticky Note
+            <i class="fas fa-upload"></i> Upload Attachment
         </button>
     </form>
 
-    <a href="{% url 'sticky_notes_list' %}" class="btn btn-outline-secondary w-100">
-        <i class="fas fa-arrow-left"></i> Back to Sticky Notes
+    <a href="{% url 'view_attachments' note.id %}" class="btn btn-outline-secondary w-100">
+        <i class="fas fa-arrow-left"></i> Back to Attachments
     </a>
 </div>
 
@@ -56,9 +35,10 @@
     h1 {
         font-size: 2.5em;
         color: #333;
+        margin-bottom: 30px;
     }
 
-    .sticky-note-form {
+    .attachment-form {
         background-color: #fff7d1;
         border-radius: 10px;
         padding: 30px;
@@ -116,4 +96,3 @@
     }
 </style>
 {% endblock %}
-

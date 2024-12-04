@@ -2,26 +2,112 @@
 {% load static %}
 
 {% block content %}
-<h2>Update Your Profile</h2>
 
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
+<div class="container my-4">
+    <h2 class="text-center" style="color: #ff8f2f;">Update Your Profile</h2>
 
-    <h4>Account Information</h4>
-    {{ user_form.as_p }}
+    <form method="POST" enctype="multipart/form-data" class="profile-form-container">
+        {% csrf_token %}
+        
+        <!-- Account Information Section -->
+        <h4 class="mt-4">Account Information</h4>
+        <div class="form-group">
+            {{ user_form.as_p }}
+        </div>
 
-    <h4>Profile Picture</h4>
-    {{ profile_form.as_p }}
+        <!-- Profile Picture Section -->
+        <h4 class="mt-4">Profile Picture</h4>
+        <div class="form-group">
+            {{ profile_form.as_p }}
+        </div>
 
-    <button type="submit" class="btn btn-primary">Save Changes</button>
-</form>
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-pastel-peach w-100">
+            <i class="fas fa-save"></i> Save Changes
+        </button>
+    </form>
 
-<hr>
+    <hr>
 
-<h4>Profile Picture Preview</h4>
-{% if request.user.profile.profile_picture %}
-    <img src="{{ request.user.profile.profile_picture.url }}" alt="Profile Picture" style="width: 150px; height: 150px; border-radius: 50%;">
-{% else %}
-    <img src="/media/profile_pics/default.jpg" alt="Default Profile Picture" style="width: 150px; height: 150px; border-radius: 50%;">
-{% endif %}
+    <!-- Profile Picture Preview Section -->
+    <div class="profile-preview text-center">
+        <h4>Profile Picture Preview</h4>
+        <div class="profile-img-preview">
+            {% if request.user.profile.profile_picture %}
+                <img src="{{ request.user.profile.profile_picture.url }}" alt="Profile Picture" class="profile-img">
+            {% else %}
+                <img src="/media/profile_pics/default.jpg" alt="Default Profile Picture" class="profile-img">
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Profile Form Container */
+    .profile-form-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 2rem;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Profile Heading */
+    .profile-form-container h2 {
+        color: #ff8f2f; /* Pastel Peach */
+        font-size: 2rem;
+    }
+
+    /* Button Styling */
+    .btn-pastel-peach {
+        background-color: #ff8f2f; /* Pastel Peach */
+        color: white;
+        font-size: 1rem;
+        padding: 1rem;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+        border: none;
+    }
+
+    .btn-pastel-peach:hover {
+        background-color: #ff7f1f;
+    }
+
+    /* Profile Image Preview */
+    .profile-img-preview {
+        margin-top: 1rem;
+        border-radius: 50%;
+        overflow: hidden;
+        width: 150px;
+        height: 150px;
+        margin: 0 auto;
+    }
+
+    .profile-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* Form Group */
+    .form-group input, .form-group select, .form-group textarea {
+        padding: 0.8rem;
+        font-size: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    /* Section Headings */
+    h4 {
+        color: #4e73df;
+        font-size: 1.4rem;
+        margin-top: 2rem;
+    }
+</style>
+
 {% endblock %}
+
+
