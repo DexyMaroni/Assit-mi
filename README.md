@@ -8,21 +8,27 @@
 
 ### 1. **Note-Taking & Categorization**
    - **Sticky Notes**: Easily jot down thoughts, reminders, goals, and logs. You can categorize your notes under 'Reminders', 'Goals', 'Thoughts', 'Logs', or 'Miscellaneous'.
+
    - **Lecture Notes**: Capture detailed notes during lectures, attach files, and organize them by course. Supports rich text formatting and real-time collaboration.
+
 
 ### 2. **Task Management**
    - **To-Do List**: Stay on top of your tasks by adding, editing, or deleting items. Mark tasks as completed and set deadlines for reminders.
 
+
 ### 3. **AI-Powered Features**
    - **Note Generation**: Automatically generate lecture notes or summaries based on audio, text, or images using the Gemini API.
+
    - **Transcription & Content Summarization**: Convert audio files into text or summarize long documents for easier study sessions.
 
 ### 4. **Collaboration Tools**
    - **Study Groups**: Create study groups for online communication and collaboration on lecture notes.
+
    - **Real-Time Editing**: Collaborate with others in real-time on lecture notes or sticky notes.
 
 ### 5. **Calendar & Reminder Integration**
    - **Calendar Sync**: Integrate with Google Calendar to manage your academic events, deadlines, and reminders seamlessly.
+
    - **Task and Note Integration**: Convert sticky notes or lecture notes into tasks with deadlines and reminders.
 
 ### 6. **Offline Functionality**
@@ -72,39 +78,24 @@
 
   7. Open your browser and visit http://127.0.0.1:8000 to access the application.
 
-##Usage
-  **Login & Registration:** Create an account using your email, and log in to access your dashboard. You can manage your notes, tasks, and     calendar events.
-  **Creating and Managing Notes:** Navigate to the Sticky Notes or Lecture Notes sections to create, edit, and organize your notes.
-  **To-Do List:** Track tasks and manage them by adding new tasks and marking them as complete when done.
-  **Collaboration:** Invite others to collaborate on notes and tasks in real-time.
+**Usage**
+
+ - **Login & Registration:** Create an account using your email, and log in to access your dashboard. You can manage your notes, tasks, and     calendar events.
+
+  - **Creating and Managing Notes:** Navigate to the Sticky Notes or Lecture Notes sections to create, edit, and organize your notes.
+
+  - **To-Do List:** Track tasks and manage them by adding new tasks and marking them as complete when done.
 
 
-##Enhanced AI Features:
-
-  More advanced AI capabilities for automatic note summarization and text generation
-  
-  Expansion of content analysis features, such as keyword extraction and sentiment analysis.
-  Support for More File Types:
-  
-  Ability to add and manage more file types like audio, video, and presentations within lecture notes.
-  Teacher Features:
-  
-  Adding support for teachers to manage courses, assignments, and share notes with students.
-  Mobile App:
-  
-  Development of a mobile app for easier access to notes, tasks, and collaboration while on the go.
-  Multi-Language Support:
-  
-  Support for multiple languages to cater to a broader student audience worldwide.
-
-
-##Creators:
   Aurum was created by:
-    **divineinyang7@gmail.com ** - Divine Inyang
-    **sesethu.ngqwaru752@gmail.com** - Zuri ngqwaru
-    **ethansevenster5@gmail.com** - Ethan Sevenster
-    We are passionate about helping students stay organized, efficient, and focused
+  
+     -divineinyang7@gmail.com - Divine Inyang.
+     -sesethu.ngqwaru752@gmail.com - Zuri ngqwaru.
+     -ethansevenster5@gmail.com - Ethan Sevenster.
 
-##License##
+  We are passionate about helping students stay organized, efficient, and focused
+
+
+License
 This project is licensed under the MIT License - see the LICENSE file for details
 
