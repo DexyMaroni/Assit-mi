@@ -1,31 +1,140 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>{{ note.title }}</h1>
-<p><strong>Course:</strong> {{ note.course }}</p>
-<p><strong>Instructor:</strong> {{ note.instructor_name }}</p>
-<p><strong>Date:</strong> {{ note.lecture_date }}</p>
-<p><strong>Last Updated:</strong> {{ note.last_updated }}</p>
+<div class="container py-5">
+    <h1 class="text-center mb-4" style="color: #333;">
+        <i class="fas fa-book"></i> {{ note.title }}
+    </h1>
 
-<div>
-  <h2>Content</h2>
-  <div>{{ note.content|safe }}</div> <!-- Render rich text safely -->
+    <div class="mb-4">
+        <p><strong>Course:</strong> {{ note.course }}</p>
+        <p><strong>Instructor:</strong> {{ note.instructor_name }}</p>
+        <p><strong>Date:</strong> {{ note.lecture_date }}</p>
+        <p><strong>Last Updated:</strong> {{ note.last_updated }}</p>
+    </div>
+
+    <div class="content-section mb-4">
+        <h2>Content</h2>
+        <div>{{ note.content|safe }}</div> <!-- Render rich text safely -->
+    </div>
+
+    <div class="attachments-section mb-4">
+        <h3>Attachments</h3>
+        {% if note.attachments.all %}
+        <ul class="list-group">
+            {% for attachment in note.attachments.all %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <a href="{{ attachment.file.url }}" target="_blank" class="text-dark">
+                    {{ attachment.file.name }}
+                </a>
+                <a href="{% url 'delete_attachment' note.id attachment.id %}" class="btn btn-danger btn-sm">
+                    <i class="fas fa-trash"></i> Delete
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No attachments found for this note.</p>
+        {% endif %}
+        <a href="{% url 'add_attachment' note.id %}" class="btn btn-primary mt-3">
+            <i class="fas fa-paperclip"></i> Add Attachment
+        </a>
+    </div>
+
+    <div class="action-buttons">
+        <a href="{% url 'edit_lecture_note' note.id %}" class="btn btn-warning">
+            <i class="fas fa-edit"></i> Edit Note
+        </a>
+        <a href="{% url 'delete_lecture_note' note.id %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this note?');">
+            <i class="fas fa-trash"></i> Delete Note
+        </a>
+    </div>
 </div>
 
-<div>
-  <h3>Attachments</h3>
-<ul>
-    {% for attachment in note.attachments.all %}
-        <li>
-            <a href="{{ attachment.file.url }}" target="_blank">{{ attachment.file.name }}</a>
-            <a href="{% url 'delete_attachment' note.id attachment.id %}" class="btn btn-danger">Delete</a>
-        </li>
-    {% endfor %}
-</ul>
-<type="submit" class="btn btn-primary">Add Attachment</button>
-</form>
+<style>
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        padding: 40px;
+    }
 
-<a href="{% url 'edit_lecture_note' note.id %}" class="btn btn-warning">Edit Note</a>
-<a href="{% url 'delete_lecture_note' note.id %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this note?');">Delete Note</a>
-</div>
+    h1 {
+        color: #333;
+        font-size: 2.5em;
+    }
+
+    .btn {
+        border-radius: 20px;
+        padding: 8px 16px;
+    }
+
+    .btn-primary {
+        background-color: #ffd700;
+        color: #333;
+        border-radius: 25px;
+        font-size: 1em;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-primary:hover {
+        background-color: #ffed4a;
+        transform: translateY(-2px);
+    }
+
+    .btn-warning {
+        background-color: #ffc107;
+        color: white;
+    }
+
+    .btn-warning:hover {
+        background-color: #ffca2c;
+    }
+
+    .btn-danger {
+        background-color: #ff6b6b;
+        color: white;
+    }
+
+    .btn-danger:hover {
+        background-color: #ff4b4b;
+    }
+
+    .content-section {
+        background-color: #fff7d1;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .attachments-section {
+        background-color: #fff7d1;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .attachments-section ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .attachments-section li {
+        background-color: #fff;
+        border-radius: 8px;
+        margin: 5px 0;
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+    }
+</style>
 {% endblock %}
+

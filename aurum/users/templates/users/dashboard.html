@@ -1,47 +1,131 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Welcome, {{ user_data.first_name }} {{ user_data.last_name }}</h2>
-  
-  <!-- Display user info -->
-  <div>
+
+<h2 class="text-center" style="color: #4e73df; font-family: 'Poppins', sans-serif;">Welcome, {{ user_data.first_name }} {{ user_data.last_name }}</h2>
+
+<!-- Display user info -->
+<div class="text-center mb-4">
     {% if user_data.profile_picture %}
-      <img src="{{ user_data.profile_picture }}" alt="Profile Picture" width="100" height="100" style="border-radius: 50%; margin-bottom: 10px;">
+        <img src="{{ user_data.profile_picture }}" alt="Profile Picture" class="rounded-circle" width="100" height="100">
     {% else %}
-      <p>No profile picture available</p>
+        <img src="/media/profile_pics/default.jpg" alt="Default Profile Picture" class="rounded-circle" width="100" height="100">
     {% endif %}
-    <p>Email: {{ user_data.email }}</p>
-    <p>Role: {{ user_data.role }}</p>
-  </div>
+    <p class="mt-3"><strong>Email:</strong> {{ user_data.email }}</p>
+    <p><strong>Role:</strong> {{ user_data.role }}</p>
+</div>
 
-  <!-- Sticky Notes Section -->
-  <div>
-    <h3>Your Sticky Notes</h3>
+<!-- Sticky Notes Section -->
+<div class="sticky-notes-container">
+    <h3 class="text-center" style="color: #4e73df;">Your Sticky Notes</h3>
     {% if sticky_notes %}
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 20px;">
-        {% for note in sticky_notes %}
-          <div style="border: 1px solid #ddd; border-radius: 8px; padding: 16px; background-color: #f9f9f9;">
-            <h4 style="margin: 0 0 8px;">{{ note.title }}</h4>
-            <p style="margin: 4px 0;"><strong>Category:</strong> {{ note.get_category_display }}</p>
-            <p style="margin: 4px 0;"><strong>Created:</strong> {{ note.created_at|date:"F j, Y, g:i a" }}</p>
-            <p style="margin: 4px 0;"><strong>Last Updated:</strong> {{ note.updated_at|date:"F j, Y, g:i a" }}</p>
-            <div style="margin-top: 10px;">
-              <a href="{% url 'view_attachments' note.id %}" style="margin-right: 8px; color: #fff; background-color: #6c757d; padding: 6px 12px; text-decoration: none; border-radius: 4px;">View Attachments</a>
-              <a href="{% url 'edit_sticky_note' note.id %}" style="margin-right: 8px; color: #fff; background-color: #007bff; padding: 6px 12px; text-decoration: none; border-radius: 4px;">Edit</a>
-              <a href="{% url 'delete_sticky_note' note.id %}" style="color: #fff; background-color: #dc3545; padding: 6px 12px; text-decoration: none; border-radius: 4px;">Delete</a>
-            </div>
-          </div>
-        {% endfor %}
-      </div>
+        <div class="sticky-notes">
+            {% for note in sticky_notes %}
+                <div class="sticky-note card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h4>{{ note.title }}</h4>
+                        <p><strong>Category:</strong> {{ note.get_category_display }}</p>
+                        <p><strong>Created:</strong> {{ note.created_at|date:"F j, Y, g:i a" }}</p>
+                        <p><strong>Last Updated:</strong> {{ note.updated_at|date:"F j, Y, g:i a" }}</p>
+                        <div class="sticky-note-actions">
+                            <a href="{% url 'view_attachments' note.id %}" class="btn btn-link text-decoration-none"><i class="fas fa-paperclip"></i> View Attachments</a>
+                            <a href="{% url 'edit_sticky_note' note.id %}" class="btn btn-warning text-white"><i class="fas fa-edit"></i> Edit</a>
+                            <a href="{% url 'delete_sticky_note' note.id %}" class="btn btn-danger text-white"><i class="fas fa-trash-alt"></i> Delete</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     {% else %}
-      <p>You have no sticky notes yet. <a href="{% url 'add_sticky_note' %}">Create one now!</a></p>
+        <div class="no-sticky-notes text-center">
+            <p>You have no sticky notes yet. <a href="{% url 'add_sticky_note' %}" class="btn btn-pastel-peach">Create one now!</a></p>
+        </div>
     {% endif %}
-  </div>
+</div>
 
-  <!-- Link to Sticky Notes page -->
-  <br>
-  <a href="{% url 'sticky_notes_list' %}" style="color: #fff; background-color: #007bff; padding: 10px 20px; text-decoration: none; border-radius: 4px;">View All Sticky Notes</a>
-  <a href="{% url 'add_lecture_note' %}">Lecture Notes</a>
-
+<!-- Links to Sticky Notes page and Lecture Notes -->
+<div class="text-center mt-4">
+    <a href="{% url 'sticky_notes_list' %}" class="btn btn-pastel-peach mx-2"><i class="fas fa-sticky-note"></i> View All Sticky Notes</a>
+    <a href="{% url 'add_lecture_note' %}" class="btn btn-secondary mx-2"><i class="fas fa-chalkboard"></i> Lecture Notes</a>
+</div>
 
 {% endblock %}
+
+<style>
+    /* Sticky Notes Container */
+    .sticky-notes-container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 1.5rem;
+        background: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Sticky Notes Card */
+    .sticky-note {
+        background-color: #ffffff;
+        border-radius: 10px;
+        padding: 1.5rem;
+    }
+
+    /* Button Styling */
+    .btn-pastel-peach {
+        background-color: #ff8f2f; /* Pastel Peach */
+        color: white;
+        font-size: 1rem;
+        padding: 0.8rem 1.5rem;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-pastel-peach:hover {
+        background-color: #ff7f1f;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+        padding: 0.8rem 1.5rem;
+        border-radius: 5px;
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a6368;
+    }
+
+    /* Sticky Note Action Buttons */
+    .sticky-note-actions a {
+        margin-right: 10px;
+    }
+
+    .sticky-note-actions .btn {
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        font-size: 0.9rem;
+    }
+
+    .btn-link {
+        color: #007bff;
+    }
+
+    .btn-link:hover {
+        text-decoration: underline;
+    }
+
+    .no-sticky-notes a {
+        background-color: #ff8f2f;
+        color: white;
+        padding: 0.8rem 1.5rem;
+        border-radius: 5px;
+        text-decoration: none;
+    }
+
+    /* Avatar Image Styling */
+    .rounded-circle {
+        border: 3px solid #4e73df;
+    }
+</style>
+

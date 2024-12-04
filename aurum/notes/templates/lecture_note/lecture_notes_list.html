@@ -1,16 +1,110 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Lecture Notes</h1>
-<a href="{% url 'add_lecture_note' %}">Add New Lecture Note</a>
+<div class="container py-5">
+    <h1 class="text-center mb-4" style="color: #333;">
+        <i class="fas fa-book-open"></i> Lecture Notes
+    </h1>
 
-<ul>
-  {% for note in notes %}
-      <li>
-          <a href="{% url 'lecture_note_detail' note.id %}">{{ note.title }}</a>
-          <a href="{% url 'edit_lecture_note' note.id %}">Edit</a>
-          <a href="{% url 'delete_lecture_note' note.id %}" onclick="return confirm('Are you sure you want to delete this note?');">Delete</a>
-      </li>
-  {% endfor %}
-</ul>
+    <div class="mb-4">
+        <a href="{% url 'add_lecture_note' %}" class="btn btn-warning btn-lg">
+            <i class="fas fa-plus-circle"></i> Add New Lecture Note
+        </a>
+    </div>
+
+    {% if notes %}
+    <ul class="list-group">
+        {% for note in notes %}
+        <li class="list-group-item d-flex justify-content-between align-items-center mb-3">
+            <a href="{% url 'lecture_note_detail' note.id %}" class="h5 text-dark" style="text-decoration: none;">
+                {{ note.title }}
+            </a>
+            <div>
+                <a href="{% url 'edit_lecture_note' note.id %}" class="btn btn-outline-primary btn-sm mx-2">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+                <a href="{% url 'delete_lecture_note' note.id %}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Are you sure you want to delete this note?');">
+                    <i class="fas fa-trash"></i> Delete
+                </a>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="text-center">No lecture notes available. Start by adding one!</p>
+    {% endif %}
+</div>
+
+<style>
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        padding: 40px;
+    }
+
+    h1 {
+        color: #333;
+        font-size: 2.5em;
+    }
+
+    .btn-warning {
+        background-color: #ffd700;
+        color: #333;
+        border-radius: 25px;
+        padding: 12px 24px;
+        font-size: 1.2em;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-warning:hover {
+        background-color: #ffed4a;
+        transform: translateY(-2px);
+    }
+
+    .list-group-item {
+        background-color: #fff7d1;
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .list-group-item:hover {
+        background-color: #ffe066;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .list-group-item a {
+        color: #333;
+        font-size: 1.2em;
+    }
+
+    .btn {
+        border-radius: 20px;
+        padding: 8px 16px;
+    }
+
+    .btn-outline-primary {
+        border-color: #007bff;
+        color: #007bff;
+    }
+
+    .btn-outline-primary:hover {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .btn-outline-danger {
+        border-color: #ff6b6b;
+        color: #ff6b6b;
+    }
+
+    .btn-outline-danger:hover {
+        background-color: #ff6b6b;
+        color: white;
+    }
+</style>
 {% endblock %}
+

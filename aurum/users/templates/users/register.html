@@ -1,6 +1,53 @@
-<h2>Register</h2>
-<form method="post">
+<h2 class="text-center" style="color: #4e73df;">Register</h2>
+<form method="post" class="login-form-container">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Register</button>
+    <div class="login-form">
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-pastel-orange w-100"><i class="fas fa-user-plus"></i> Register</button>
+    </div>
 </form>
+
+<style>
+    /* Form Container */
+    .login-form-container {
+        max-width: 400px;
+        margin: 2rem auto;
+        padding: 1.5rem;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Register Heading */
+    .login-form-container h2 {
+        color: #4e73df;
+        margin-bottom: 1rem;
+        font-size: 1.8rem;
+    }
+
+    /* Form Fields */
+    .login-form input {
+        padding: 0.8rem;
+        font-size: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    /* Register Button */
+    .btn-pastel-orange {
+        padding: 0.8rem;
+        font-size: 1rem;
+        background-color: #ff8f2f; /* Pastel Orange */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-pastel-orange:hover {
+        background-color: #ff7f1f;
+    }
+</style>
