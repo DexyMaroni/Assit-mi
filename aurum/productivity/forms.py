@@ -1,5 +1,8 @@
 # forms.py
 from django import forms
+from .models import ToDo
+
+
 
 class TextGenerationForm(forms.Form):
     prompt = forms.CharField(
@@ -21,3 +24,11 @@ class TextGenerationForm(forms.Form):
     )
 
 
+class ToDoForm(forms.ModelForm):
+    class Meta:
+        model = ToDo
+        fields = ['task', 'completed']
+        widgets = {
+            'task': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter a task'}),
+            'completed': forms.CheckboxInput(attrs={'class': 'form-check-input'})
+        }

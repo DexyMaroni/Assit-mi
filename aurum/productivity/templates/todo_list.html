@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="text-center" style="color: #4e73df;">My ToDo List</h1>
+
+        <div class="text-center">
+            <a href="{% url 'add_task' %}" class="btn btn-pastel-orange w-100" style="max-width: 200px;">
+                <i class="fas fa-plus"></i> Add New Task
+            </a>
+        </div>
+
+        <ul class="todo-list">
+            {% for task in tasks %}
+                <li>
+                    <form method="post" action="{% url 'toggle_task' task.id %}">
+                        {% csrf_token %}
+                        <input type="checkbox" name="completed" {% if task.completed %}checked{% endif %} onchange="this.form.submit()">
+                        <span style="text-decoration: {% if task.completed %}line-through{% else %}none{% endif %};">{{ task.task }}</span>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <div class="motivational-quote" style="margin-top: 40px; padding: 20px; background-color: #f9f9f9; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            <h3 style="color: #4CAF50; text-align: center;">"The best way to get started is to quit talking and begin doing." - Walt Disney</h3>
+        </div>
+    </div>
+
+    <style>
+        .todo-list {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .todo-list li {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .todo-list input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .motivational-quote h3 {
+            font-size: 1.2em;
+            font-style: italic;
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 768px) {
+            .todo-list li {
+                font-size: 1em;
+            }
+
+            .motivational-quote h3 {
+                font-size: 1em;
+            }
+        }
+    </style>
+{% endblock %}
