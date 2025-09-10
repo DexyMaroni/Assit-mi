@@ -1,4 +1,4 @@
-# Aurum - Student Assistant Application
+# Assit-mi - Student Assistant Application
 
   Aurum is a student assistant application designed to streamline learning and productivity for students at all levels. With features such as note-taking, task management, collaboration tools, and AI-driven capabilities, Aurum aims to enhance your study experience and keep you organized.
 
